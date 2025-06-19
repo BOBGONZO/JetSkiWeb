@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle, User, Calendar } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const ContactPage = () => {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const item = params.get('item');
+  const itemId = params.get('id');
+
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
@@ -20,6 +26,16 @@ const ContactPage = () => {
     jetskiInterest: '',
     experience: 'beginner'
   });
+
+  useEffect(() => {
+    if (item && itemId) {
+      setContactForm((prev) => ({
+        ...prev,
+        subject: 'sales',
+        message: `I'm interested in Jet Ski ID: ${itemId}. Please provide more details.`
+      }));
+    }
+  }, [item, itemId]);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -182,7 +198,7 @@ const ContactPage = () => {
                     type="text"
                     required
                     value={contactForm.name}
-                    onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
+                    onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -194,7 +210,7 @@ const ContactPage = () => {
                     type="email"
                     required
                     value={contactForm.email}
-                    onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
+                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -208,7 +224,7 @@ const ContactPage = () => {
                   <input
                     type="tel"
                     value={contactForm.phone}
-                    onChange={(e) => setContactForm({...contactForm, phone: e.target.value})}
+                    onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -218,7 +234,7 @@ const ContactPage = () => {
                   </label>
                   <select
                     value={contactForm.subject}
-                    onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
+                    onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="general">General Inquiry</option>
@@ -241,7 +257,7 @@ const ContactPage = () => {
                       type="radio"
                       value="email"
                       checked={contactForm.preferredContact === 'email'}
-                      onChange={(e) => setContactForm({...contactForm, preferredContact: e.target.value})}
+                      onChange={(e) => setContactForm({ ...contactForm, preferredContact: e.target.value })}
                       className="mr-2"
                     />
                     Email
@@ -251,7 +267,7 @@ const ContactPage = () => {
                       type="radio"
                       value="phone"
                       checked={contactForm.preferredContact === 'phone'}
-                      onChange={(e) => setContactForm({...contactForm, preferredContact: e.target.value})}
+                      onChange={(e) => setContactForm({ ...contactForm, preferredContact: e.target.value })}
                       className="mr-2"
                     />
                     Phone
@@ -267,7 +283,7 @@ const ContactPage = () => {
                   rows={4}
                   required
                   value={contactForm.message}
-                  onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
+                  onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Tell us how we can help you..."
                 />
@@ -299,7 +315,7 @@ const ContactPage = () => {
                     type="text"
                     required
                     value={testRideForm.name}
-                    onChange={(e) => setTestRideForm({...testRideForm, name: e.target.value})}
+                    onChange={(e) => setTestRideForm({ ...testRideForm, name: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -311,7 +327,7 @@ const ContactPage = () => {
                     type="email"
                     required
                     value={testRideForm.email}
-                    onChange={(e) => setTestRideForm({...testRideForm, email: e.target.value})}
+                    onChange={(e) => setTestRideForm({ ...testRideForm, email: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -325,7 +341,7 @@ const ContactPage = () => {
                   type="tel"
                   required
                   value={testRideForm.phone}
-                  onChange={(e) => setTestRideForm({...testRideForm, phone: e.target.value})}
+                  onChange={(e) => setTestRideForm({ ...testRideForm, phone: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -338,7 +354,7 @@ const ContactPage = () => {
                   <input
                     type="date"
                     value={testRideForm.preferredDate}
-                    onChange={(e) => setTestRideForm({...testRideForm, preferredDate: e.target.value})}
+                    onChange={(e) => setTestRideForm({ ...testRideForm, preferredDate: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -348,7 +364,7 @@ const ContactPage = () => {
                   </label>
                   <select
                     value={testRideForm.preferredTime}
-                    onChange={(e) => setTestRideForm({...testRideForm, preferredTime: e.target.value})}
+                    onChange={(e) => setTestRideForm({ ...testRideForm, preferredTime: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Select Time</option>
@@ -366,7 +382,7 @@ const ContactPage = () => {
                 <input
                   type="text"
                   value={testRideForm.jetskiInterest}
-                  onChange={(e) => setTestRideForm({...testRideForm, jetskiInterest: e.target.value})}
+                  onChange={(e) => setTestRideForm({ ...testRideForm, jetskiInterest: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   placeholder="e.g., Sea-Doo RXP-X, Yamaha FX Cruiser"
                 />
@@ -378,7 +394,7 @@ const ContactPage = () => {
                 </label>
                 <select
                   value={testRideForm.experience}
-                  onChange={(e) => setTestRideForm({...testRideForm, experience: e.target.value})}
+                  onChange={(e) => setTestRideForm({ ...testRideForm, experience: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="beginner">Beginner (New to jet skis)</option>

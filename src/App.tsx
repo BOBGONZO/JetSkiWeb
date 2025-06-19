@@ -25,7 +25,6 @@ const HomePage = () => {
       <ServiceBlocks />
       <SearchByType />
       <Financing />
-      <About />
       <Reviews />
     </>
   );
@@ -45,6 +44,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/financing" element={<Financing />} />
           <Route path="/financing/apply" element={<FinancingApplication />} />
+          <Route path="/about" element={<About />} />
         </Routes>
         <Footer />
       </div>

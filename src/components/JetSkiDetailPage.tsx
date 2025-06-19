@@ -17,6 +17,7 @@ import {
   Share,
   ArrowLeft,
   FileText,
+  MapPin
 } from "lucide-react";
 
 // This would typically come from an API or database
@@ -348,6 +349,23 @@ const JetSkiDetailPage = () => {
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [tabView, setTabView] = useState("specs"); // specs, features, financing
+  const [isFavorite, setIsFavorite] = useState(() => {
+    const favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+    return favs.includes(jetSki.id);
+  });
+  const [shareMsg, setShareMsg] = useState("");
+
+  const toggleFavorite = () => {
+    let favs = JSON.parse(localStorage.getItem("favorites") || "[]");
+    if (favs.includes(jetSki.id)) {
+      favs = favs.filter((fid: number) => fid !== jetSki.id);
+      setIsFavorite(false);
+    } else {
+      favs.push(jetSki.id);
+      setIsFavorite(true);
+    }
+    localStorage.setItem("favorites", JSON.stringify(favs));
+  };
 
   const nextImage = () => {
     setActiveImageIndex((activeImageIndex + 1) % jetSki.images.length);
@@ -366,6 +384,17 @@ const JetSkiDetailPage = () => {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     });
+  };
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setShareMsg("Link copied!");
+      setTimeout(() => setShareMsg(""), 2000);
+    } catch {
+      setShareMsg("Failed to copy");
+      setTimeout(() => setShareMsg(""), 2000);
+    }
   };
 
   return (
@@ -484,15 +513,14 @@ const JetSkiDetailPage = () => {
                 {/* Condition Badge */}
                 <div className="absolute top-4 left-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold text-white ${
-                      jetSki.condition === "New"
-                        ? "bg-green-600"
-                        : jetSki.condition === "Like New"
-                          ? "bg-blue-600"
-                          : jetSki.condition === "Excellent"
-                            ? "bg-yellow-600"
-                            : "bg-gray-600"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-sm font-semibold text-white ${jetSki.condition === "New"
+                      ? "bg-green-600"
+                      : jetSki.condition === "Like New"
+                        ? "bg-blue-600"
+                        : jetSki.condition === "Excellent"
+                          ? "bg-yellow-600"
+                          : "bg-gray-600"
+                      }`}
                   >
                     {jetSki.condition}
                   </span>
@@ -505,11 +533,10 @@ const JetSkiDetailPage = () => {
                   <button
                     key={index}
                     onClick={() => setActiveImageIndex(index)}
-                    className={`flex-1 h-20 rounded-md overflow-hidden border-2 transition-all ${
-                      index === activeImageIndex
-                        ? "border-blue-600"
-                        : "border-transparent"
-                    }`}
+                    className={`flex-1 h-20 rounded-md overflow-hidden border-2 transition-all ${index === activeImageIndex
+                      ? "border-blue-600"
+                      : "border-transparent"
+                      }`}
                   >
                     <img
                       src={image}
@@ -526,31 +553,28 @@ const JetSkiDetailPage = () => {
               <div className="flex border-b">
                 <button
                   onClick={() => setTabView("specs")}
-                  className={`flex-1 py-4 text-center font-medium ${
-                    tabView === "specs"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
+                  className={`flex-1 py-4 text-center font-medium ${tabView === "specs"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                 >
                   Specifications
                 </button>
                 <button
                   onClick={() => setTabView("features")}
-                  className={`flex-1 py-4 text-center font-medium ${
-                    tabView === "features"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
+                  className={`flex-1 py-4 text-center font-medium ${tabView === "features"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                 >
                   Features
                 </button>
                 <button
                   onClick={() => setTabView("financing")}
-                  className={`flex-1 py-4 text-center font-medium ${
-                    tabView === "financing"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
+                  className={`flex-1 py-4 text-center font-medium ${tabView === "financing"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-500 hover:text-gray-700"
+                    }`}
                 >
                   Financing
                 </button>
@@ -793,7 +817,7 @@ const JetSkiDetailPage = () => {
 
                 <div className="flex flex-col space-y-3">
                   <Link
-                    to="/contact?item=jetski&id=${jetSki.id}"
+                    to={`/contact?item=jetski&id=${jetSki.id}`}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-semibold transition-colors flex items-center justify-center"
                   >
                     <MessageCircle className="h-5 w-5 mr-2" />
@@ -806,14 +830,15 @@ const JetSkiDetailPage = () => {
                     <DollarSign className="h-5 w-5 mr-2" />
                     Finance This Jet Ski
                   </Link>
-                  <button className="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 py-3 px-4 rounded-md font-semibold transition-colors flex items-center justify-center">
+                  <button onClick={toggleFavorite} className={`w-full border border-gray-300 ${isFavorite ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50 text-gray-700'} py-3 px-4 rounded-md font-semibold transition-colors flex items-center justify-center`}>
                     <Heart className="h-5 w-5 mr-2" />
-                    Save to Favorites
+                    {isFavorite ? 'Saved to Favorites' : 'Save to Favorites'}
                   </button>
-                  <button className="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 py-3 px-4 rounded-md font-semibold transition-colors flex items-center justify-center">
+                  <button onClick={handleShare} className="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 py-3 px-4 rounded-md font-semibold transition-colors flex items-center justify-center">
                     <Share className="h-5 w-5 mr-2" />
                     Share Listing
                   </button>
+                  {shareMsg && <div className="text-green-600 text-sm mt-2 text-center">{shareMsg}</div>}
                 </div>
               </div>
             </div>
@@ -836,13 +861,12 @@ const JetSkiDetailPage = () => {
                       : "9012 Marine Dr, Oakville ON, L6H 3M2"}
                 </p>
                 <a
-                  href={`tel:${
-                    jetSki.location === "Toronto Showroom"
-                      ? "4165552782"
-                      : jetSki.location === "Mississauga Showroom"
-                        ? "9055552782"
-                        : "9055557378"
-                  }`}
+                  href={`tel:${jetSki.location === "Toronto Showroom"
+                    ? "4165552782"
+                    : jetSki.location === "Mississauga Showroom"
+                      ? "9055552782"
+                      : "9055557378"
+                    }`}
                   className="inline-flex items-center text-blue-600 hover:text-blue-800"
                 >
                   <Phone className="h-4 w-4 mr-2" />

@@ -8,6 +8,9 @@ const InventoryPage = () => {
   const [selectedType, setSelectedType] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("price-low");
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    return JSON.parse(localStorage.getItem("favorites") || "[]");
+  });
 
   const jetSkiInventory = [
     {
@@ -166,6 +169,17 @@ const InventoryPage = () => {
     { label: "Hours: Lowest", value: "hours-low" },
   ];
 
+  const toggleFavorite = (id: number) => {
+    let favs = [...favorites];
+    if (favs.includes(id)) {
+      favs = favs.filter((fid) => fid !== id);
+    } else {
+      favs.push(id);
+    }
+    setFavorites(favs);
+    localStorage.setItem("favorites", JSON.stringify(favs));
+  };
+
   // Filter and sort logic
   const filteredAndSortedInventory = jetSkiInventory
     .filter((jetski) => {
@@ -312,21 +326,20 @@ const InventoryPage = () => {
                 />
                 <div className="absolute top-4 left-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-semibold text-white ${
-                      jetski.condition === "New"
+                    className={`px-3 py-1 rounded-full text-sm font-semibold text-white ${jetski.condition === "New"
                         ? "bg-green-600"
                         : jetski.condition === "Like New"
                           ? "bg-blue-600"
                           : jetski.condition === "Excellent"
                             ? "bg-yellow-600"
                             : "bg-gray-600"
-                    }`}
+                      }`}
                   >
                     {jetski.condition}
                   </span>
                 </div>
-                <button className="absolute top-4 right-4 p-2 bg-white bg-opacity-90 rounded-full hover:bg-opacity-100 transition-all">
-                  <Heart className="h-5 w-5 text-gray-600" />
+                <button onClick={() => toggleFavorite(jetski.id)} className={`absolute top-4 right-4 p-2 bg-white bg-opacity-90 rounded-full hover:bg-opacity-100 transition-all ${favorites.includes(jetski.id) ? 'text-red-500' : ''}`} aria-label="Save to Favorites">
+                  <Heart className={`h-5 w-5 ${favorites.includes(jetski.id) ? 'fill-red-500' : 'text-gray-600'}`} />
                 </button>
               </div>
 

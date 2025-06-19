@@ -117,13 +117,7 @@ const Header = () => {
                     Finance Department
                   </Link>
                   <Link
-                    to="/financing#calculator"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                  >
-                    Payment Calculator
-                  </Link>
-                  <Link
-                    to="/financing#apply"
+                    to="/financing/apply"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
                   >
                     Apply for Financing
@@ -137,33 +131,12 @@ const Header = () => {
             >
               Service
             </Link>
-            <div className="relative group">
-              <button className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                About
-              </button>
-              <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="py-1">
-                  <Link
-                    to="/#about-us"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                  >
-                    About Us
-                  </Link>
-                  <Link
-                    to="/contact#team"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                  >
-                    Our Team
-                  </Link>
-                  <Link
-                    to="/#reviews"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50"
-                  >
-                    Reviews
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <Link
+              to="/about"
+              className={`${location.pathname === "/about" ? "text-blue-600" : "text-gray-700"} hover:text-blue-600 font-medium transition-colors`}
+            >
+              About
+            </Link>
             <Link
               to="/contact"
               className={`${location.pathname === "/contact" ? "text-blue-600" : "text-gray-700"} hover:text-blue-600 font-medium transition-colors`}
@@ -244,8 +217,8 @@ const Header = () => {
               Service
             </Link>
             <Link
-              to="/#about"
-              className="block px-3 py-2 text-gray-700 hover:text-blue-600"
+              to="/about"
+              className={`block px-3 py-2 ${location.pathname === "/about" ? "text-blue-600" : "text-gray-700"} hover:text-blue-600`}
               onClick={() => setIsMenuOpen(false)}
             >
               About

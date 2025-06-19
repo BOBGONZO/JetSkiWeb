@@ -80,7 +80,7 @@ const FinancingApplication = () => {
 
     if (principal > 0 && months > 0) {
       const payment = (principal * interestRate * Math.pow(1 + interestRate, months)) /
-                      (Math.pow(1 + interestRate, months) - 1);
+        (Math.pow(1 + interestRate, months) - 1);
       return payment.toFixed(2);
     }
     return '0.00';
@@ -741,54 +741,52 @@ const FinancingApplication = () => {
               </a>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Jet Ski Financing Application</h2>
-            <p className="text-gray-600">
-              Complete this secure application to get pre-approved for jet ski financing. Our process is quick, secure, and designed to get you on the water as soon as possible.
-            </p>
-          </div>
-
-          {/* Progress Steps */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              {[1, 2, 3, 4].map((step) => (
-                <div key={step} className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold ${
-                      step <= formStep ? 'bg-blue-600' : 'bg-gray-300'
-                    }`}
-                  >
-                    {step}
-                  </div>
-                  <div className="text-xs text-gray-500 mt-2">
-                    {step === 1 && 'Personal'}
-                    {step === 2 && 'Employment'}
-                    {step === 3 && 'Financing'}
-                    {step === 4 && 'Finalize'}
-                  </div>
-                </div>
-              ))}
+        ) : (
+          <div className="bg-white rounded-lg shadow-md p-8">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Jet Ski Financing Application</h2>
+              <p className="text-gray-600">
+                Complete this secure application to get pre-approved for jet ski financing. Our process is quick, secure, and designed to get you on the water as soon as possible.
+              </p>
             </div>
-            <div className="relative mt-2">
-              <div className="h-1 w-full bg-gray-200 rounded"></div>
-              <div
-                className="h-1 bg-blue-600 rounded absolute top-0 left-0 transition-all duration-300"
-                style={{ width: `${(formStep / 4) * 100}%` }}
-              ></div>
-            </div>
-          </div>
 
-          <form onSubmit={handleSubmit}>
-            {renderFormStep()}
-          </form>
-        </div>
-      )}
-    </div>
-  </section>
-);
+            {/* Progress Steps */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between">
+                {[1, 2, 3, 4].map((step) => (
+                  <div key={step} className="flex flex-col items-center">
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold ${step <= formStep ? 'bg-blue-600' : 'bg-gray-300'
+                        }`}
+                    >
+                      {step}
+                    </div>
+                    <div className="text-xs text-gray-500 mt-2">
+                      {step === 1 && 'Personal'}
+                      {step === 2 && 'Employment'}
+                      {step === 3 && 'Financing'}
+                      {step === 4 && 'Finalize'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="relative mt-2">
+                <div className="h-1 w-full bg-gray-200 rounded"></div>
+                <div
+                  className="h-1 bg-blue-600 rounded absolute top-0 left-0 transition-all duration-300"
+                  style={{ width: `${(formStep / 4) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              {renderFormStep()}
+            </form>
+          </div>
+        )}
+      </div>
+    </section>
+  );
 };
 
 export default FinancingApplication;
